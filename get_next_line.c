@@ -6,18 +6,22 @@
 /*   By: kuyamagu <kuyamagu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 17:53:27 by kuyamagu          #+#    #+#             */
-/*   Updated: 2024/07/06 20:30:24 by kuyamagu         ###   ########.fr       */
+/*   Updated: 2024/07/07 23:29:45 by kuyamagu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+#include <stdio.h>
 
 char	ft_getchar(int fd)
 {
-	static char	buff[BUFFER_SIZE];
+	static char	*buff;
 	static char	*ptr;
 	static int	read_byte;
 
+	buff = (char*)malloc(sizeof(char) * BUFFER_SIZE);
+	if (buff == NULL)
+		return (-2);
 	if (read_byte == 0)
 	{
 		read_byte = read(fd, buff, BUFFER_SIZE);
@@ -27,6 +31,7 @@ char	ft_getchar(int fd)
 		return (read_byte++, -2);
 	if (--read_byte >= 0)
 		return (*ptr++);
+	free(buff);
 	return (read_byte++, EOF);
 }
 
@@ -76,4 +81,30 @@ char	*get_next_line(int fd)
 			break ;
 	}
 	return (output);
+}
+
+#include <libc.h>
+
+/*__attribute__((destructor))
+static void destructor() {
+    system("leaks -q a.out");
+}
+*/
+int	main() {
+	int fd, i;
+	char *line;
+
+	i = 0;
+	fd = open("test.txt", O_RDONLY);
+	write(1, "im here\n", 8);
+	while (1)
+	{
+		line = get_next_line(fd);
+		if (!line)
+			break ;
+		printf("%s", line);
+		free(line);
+	}
+	close(fd);
+	return 0;
 }

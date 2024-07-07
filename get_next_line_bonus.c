@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kuyamagu <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: kuyamagu <kuyamagu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/06 21:12:56 by kuyamagu          #+#    #+#             */
-/*   Updated: 2024/07/06 21:38:02 by kuyamagu         ###   ########.fr       */
+/*   Updated: 2024/07/07 23:07:30 by kuyamagu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,8 @@ char	*get_next_line(int fd)
 
 	output = NULL;
 	output_len = 2;
+	if (fd >= 10240)
+		return (NULL);
 	while (1)
 	{
 		c = ft_getchar(fd);
@@ -74,4 +76,43 @@ char	*get_next_line(int fd)
 			break ;
 	}
 	return (output);
+}
+
+
+#include <libc.h>
+
+__attribute__((destructor))
+static void destructor() {
+    system("leaks -q a.out");
+}
+
+int	main() {
+	int fd, i;
+//	int fd2;
+	char *line;
+//	char *line2;
+
+	i = 0;
+	//fd = open("test.txt", O_RDONLY);
+	//fd2 = open("test2.txt", O_RDONLY);
+	//write(1, "im here\n", 8);
+	while (++i < 10)
+	{
+		line = get_next_line(30000);
+		if (line == NULL)
+			printf("NULL\n");
+		else
+			printf("%s\n", line);
+
+		//line2 = get_next_line(fd2);
+		//printf("%s\n", line2);
+		free(line);
+		//free(line2);
+	}
+//	printf("1\n");
+	//close(fd);
+	//close(fd2);
+//
+//printf("2\n");
+	// return 0;
 }
