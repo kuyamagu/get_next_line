@@ -6,7 +6,7 @@
 /*   By: kuyamagu <kuyamagu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/06 21:12:56 by kuyamagu          #+#    #+#             */
-/*   Updated: 2024/07/07 23:07:30 by kuyamagu         ###   ########.fr       */
+/*   Updated: 2024/07/15 15:23:29 by kuyamagu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 char	ft_getchar(int fd)
 {
-	static t_buffinfo	buffinfo[OPEN_MAX];
+	static t_buffinfo	buffinfo[OPEN_MAX + 1];
 
 	if (buffinfo[fd].read_byte == 0)
 	{
